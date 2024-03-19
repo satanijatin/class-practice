@@ -24,15 +24,27 @@ def reg(request):
                       
             select_user.country = data.get('country')
                                  
-            try:    
-                    select_user.lang=str_lan
-                    os.remove(select_user.img.path)
-                    select_user.img = request.FILES['img']
+            # try:    
+            #         select_user.lang=str_lan
+            #         os.remove(select_user.img.path)
+            #         select_user.img = request.FILES['img']
                   
-                    select_user.save()
-            except:
-                    select_user.lang=str_lan
-                    select_user.save()
+            #         select_user.save()
+            # except:
+            #         select_user.lang=str_lan
+            #         select_user.save()
+            
+            if len(request.FILES) !=0 :
+                    if select_user.img != "":
+                        os.remove(select_user.img.path)
+                        select_user.img = request.FILES.get('img')
+                    else:
+                        select_user.img = request.FILES.get('img')
+            else:
+                select_user.img=select_user.img
+                    
+                    
+                    
             return redirect('reg')
         else:
             data = request.POST
