@@ -1,13 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Student
+import os
 # Create your views here.
 def index(request):
     return render(request,'index.html')
-
-
-
-
-
 
 def reg(request):
 
@@ -30,11 +26,13 @@ def reg(request):
                                  
             try:    
                     select_user.lang=str_lan
+                    os.remove(select_user.img.path)
                     select_user.img = request.FILES['img']
+                  
                     select_user.save()
             except:
                     select_user.lang=str_lan
-                    select_user.save1()
+                    select_user.save()
             return redirect('reg')
         else:
             data = request.POST
@@ -70,9 +68,11 @@ def editUser(request,user_id):
        
     select_user = Student.objects.get(id=user_id)
     alldata = Student.objects.all()
-    return render(request,"reg.html",{"select_user":select_user,'alldata':alldata})
+    action="edit"
+    return render(request,"reg.html",{"select_user":select_user,'alldata':alldata,"action":action})
 
 def deleteUser(request,user_id):
     deletedata=Student.objects.get(id=user_id)
+    os.remove(deletedata.img.path)
     deletedata.delete()
     return redirect('reg')

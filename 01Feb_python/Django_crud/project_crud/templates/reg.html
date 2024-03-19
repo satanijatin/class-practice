@@ -1,3 +1,7 @@
+{% load custom_tag %}
+{% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,33 +36,41 @@
         </div>
         <div class="form-group">
             <label for="pwd">Gender:</label>
-            <input type="radio" value="male" name="gender" checked value="{{ select_user.gender }}"> Male
-            <input type="radio" value="female" name="gender" value="{{ select_user.gender }}"> Female 
+            <input type="radio" value="Male" name="gender" value="Male" {% if select_user.gender == 'Male' %} checked {% endif %}>Male
+            <input type="radio" value="Female" name="gender" value="Female" {% if select_user.gender == 'Female' %} checked {% endif %}> Female 
         </div>
        
         <div class="form-group">
         <label for="">Languages</label>
        
-        <input type="checkbox" value="gujarati" name="lng" value="{{select_user.lng}}"> Gujarati
-        <input type="checkbox" value="hindi" name="lng" value="{{select_user.lng}}"> Hindi
-        <input type="checkbox" value="english" name="lng" value="{{select_user.lng}}"> English 
+        <input type="checkbox" value="Gujarati" name="lng" value="Gujarati" {% if select_user.lang|isExists:'Gujarati' %}  checked {% endif %}> Gujarati
+        <input type="checkbox" value="Hindi" name="lng" value="Hindi" {% if select_user.lang|isExists:'Hindi' %}  checked {% endif %}> Hindi
+        <input type="checkbox" value="English" name="lng" value="English" {% if select_user.lang|isExists:'English' %}  checked {% endif %}> English 
      
         </div>
 
         <div class="form-group">
             <label for="">Country</label>
             <select name="country" id="country">
-                <option value="India">India</option>
-                <option value="USA">USA</option>
-                <option value="Canada">Canada</option>
+                <option value="India" {% if select_user.country|isExists:'India'  %} selected {% endif %}>India</option>
+                <option value="USA" {% if select_user.country|isExists:'USA'  %} selected {% endif %}>USA</option>
+                <option value="Canada" {% if select_user.country|isExists:'Canada'  %} selected {% endif %}>Canada</option>
             </select>
     
         </div>
         <div class="form-group">
-            <input type="file" name="img">
-    
+            <input type="file" name="img" onchange="loadFile(event)">
+            {% if action == 'edit' and select_user.img != "" %}
+
+                <img src="{{ select_user.img.url }}" alt="img1" id ="output" height="200px" width="200px">
+              
+              {% else %}
+              <img  src="/media/images/defaultimg.png" alt="img"  id="output" height="200px" width="200px" >
+            {% endif %} 
+           
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-primary ">Clear</button>
       </form>
     </div>
     
@@ -69,29 +81,30 @@
       <table class="table">
         <thead>
           <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Password</th>
-            <th>Gender</th>
-            <th>Languages</th>
-            <th>Country</th>
-            <th>Photo</th>
-            <th>Action</th>
+            <th class="text-center">Id</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Password</th>
+            <th class="text-center">Gender</th>
+            <th class="text-center">Languages</th>
+            <th class="text-center">Country</th>
+            <th class="text-center">Photo</th>
+            
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
         {% for row in alldata %}
           <tr>
-            <td>{{ row.id }}</td>
-            <td>{{ row.uname }}</td>
-            <td>{{ row.email }}</td>
-            <td>{{ row.password }}</td>
-            <td>{{ row.gender }}</td>
-            <td>{{ row.lang }}</td>
-            <td>{{ row.country }}</td>
-            <td><img src="/media/{{row.img}}" alt="" height="50px" width="50px"></td>
-             <td>
+            <td class="text-center">{{ row.id }}</td>
+            <td class="text-center">{{ row.uname }}</td>
+            <td class="text-center">{{ row.email }}</td>
+            <td class="text-center">{{ row.password }}</td>
+            <td class="text-center">{{ row.gender }}</td>
+            <td class="text-center">{{ row.lang }}</td>
+            <td class="text-center">{{ row.country }}</td>
+            <td class="text-center"><img src="/media/{{row.img}}" alt="" height="50px" width="50px"></td>
+             <td class="text-center">
                 <a href="{% url 'editUser' row.id  %}" class="btn btn-info" role="button">Edit</a>
                 <a href="{% url 'deleteUser' row.id  %}" class="btn btn-danger" role="button">Delete</a>
             </td> 
@@ -104,5 +117,13 @@
 
 
 </body>
-
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) 
+    }
+  };
+</script>
 </html>
