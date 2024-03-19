@@ -43,7 +43,7 @@ def reg(request):
             else:
                 select_user.img=select_user.img
                     
-                    
+            select_user.save()
                     
             return redirect('reg')
         else:
