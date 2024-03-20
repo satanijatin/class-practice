@@ -70,15 +70,12 @@ def reg(request):
           
 
             Student.objects.create(uname=uname,email=email,password=password,gender=gender,lang=lng,country=country,img=img)
-            # alldata = Student.objects.all()
-            # context = {'alldata':alldata}
             return redirect('reg')
-            # return render(request,'reg.html',context)
+            
     else:
-        
-       
+               
         alldata = Student.objects.all()
-        p = Paginator(alldata, 3) 
+        p = Paginator(alldata, 2) 
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number) 
@@ -107,7 +104,7 @@ def editUser(request,user_id):
        
             page_obj = p.page(1)
         except EmptyPage:
-        # if page is empty then return last page
+      
             page_obj = p.page(p.num_pages)
         
         context =  {'alldata':alldata,
