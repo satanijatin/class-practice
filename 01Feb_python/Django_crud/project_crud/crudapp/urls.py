@@ -26,6 +26,7 @@ urlpatterns = [
     path('reg',views.reg,name="reg"),
     path('deleteUser/<int:user_id>', views.deleteUser,name="deleteUser"),
     path('editUser/<int:user_id>', views.editUser,name="editUser"),
+
 ]
 
 if settings.DEBUG:

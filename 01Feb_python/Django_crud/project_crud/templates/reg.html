@@ -21,6 +21,7 @@
     
       <form action="{% url 'reg' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+      
         <input type="hidden" name="user_id" value="{{ select_user.id }}"  />
         <div class="form-group">
             <label for="email">Name:</label>
@@ -77,8 +78,9 @@
     <div class="container">
        
       <h2 align="center">Student Table</h2>
-             
-      <table class="table">
+             <input type="text" placeholder="Search for names.." name="searchname">
+
+      <table class="table" id="myTable">
         <thead>
           <tr>
             <th class="text-center">Id</th>
@@ -93,7 +95,7 @@
             <th class="text-center">Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="geeks">
         {% for row in alldata %}
           <tr>
             <td class="text-center">{{ row.id }}</td>
@@ -113,17 +115,23 @@
           
         </tbody>
       </table>
+
+      <ul class="pagination mb-4" style="margin-top: 30px;">
+        <li class="page-item {% if page_obj.has_previous == False %} disabled {% endif %}">
+           <a class="page-link" onClick="" tabindex="-1">Previous</a>
+        </li>
+        {% for p in total_page %}
+        <li class="page-item {% if p == page_obj.number %} active {% endif %}"><a class="page-link" onClick="">{{p}}</a></li>
+        {% endfor %}
+     
+        <li class="page-item {% if page_obj.has_next == False %} disabled {% endif %}">
+           <a class="page-link" onClick="">Next </a>
+        </li>
+     </ul>
     </div>
 
-
 </body>
-<script>
-  var loadFile = function(event) {
-    var output = document.getElementById('output');
-    output.src = URL.createObjectURL(event.target.files[0]);
-    output.onload = function() {
-      URL.revokeObjectURL(output.src) 
-    }
-  };
-</script>
+
+
+
 </html>

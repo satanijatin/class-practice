@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Student
 import os
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -68,23 +70,65 @@ def reg(request):
           
 
             Student.objects.create(uname=uname,email=email,password=password,gender=gender,lang=lng,country=country,img=img)
-            alldata = Student.objects.all()
-            context = {'alldata':alldata}
-            return render(request,'reg.html',context)
+            # alldata = Student.objects.all()
+            # context = {'alldata':alldata}
+            return redirect('reg')
+            # return render(request,'reg.html',context)
     else:
+        
+       
         alldata = Student.objects.all()
-        context = {'alldata':alldata}
+        p = Paginator(alldata, 3) 
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number) 
+        except PageNotAnInteger:
+       
+            page_obj = p.page(1)
+        except EmptyPage:
+        # if page is empty then return last page
+            page_obj = p.page(p.num_pages)
+        
+        context =  {'alldata':alldata,
+            'page_obj': page_obj,
+             'total_page':range(1, page_obj.paginator.num_pages+1)
+         }
         return render(request,'reg.html',context)
 
 def editUser(request,user_id):
        
-    select_user = Student.objects.get(id=user_id)
-    alldata = Student.objects.all()
-    action="edit"
-    return render(request,"reg.html",{"select_user":select_user,'alldata':alldata,"action":action})
+        select_user = Student.objects.get(id=user_id)
+        alldata = Student.objects.all()
+        p = Paginator(alldata, 3) 
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number) 
+        except PageNotAnInteger:
+       
+            page_obj = p.page(1)
+        except EmptyPage:
+        # if page is empty then return last page
+            page_obj = p.page(p.num_pages)
+        
+        context =  {'alldata':alldata,
+            'page_obj': page_obj,
+            "select_user":select_user,
+            'action':"edit",
+             'total_page':range(1, page_obj.paginator.num_pages+1)
+         }
+    
+        return render(request,"reg.html",context)
 
 def deleteUser(request,user_id):
     deletedata=Student.objects.get(id=user_id)
     os.remove(deletedata.img.path)
     deletedata.delete()
     return redirect('reg')
+
+
+
+
+  
+        
+    
+    
