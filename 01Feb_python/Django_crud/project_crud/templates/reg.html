@@ -117,18 +117,31 @@
       </table>
 
       <ul class="pagination mb-4" style="margin-top: 30px;">
+        {%if page_obj.has_previous %}
+        <li class="page-item">
+           
+          <a class="page-link"  href="?page={{ page_obj.number|add:-1 }}" tabindex="-1">Previous</a>
+       </li>
+        {% else %}
         <li class="page-item {% if page_obj.has_previous == False %} disabled {% endif %}">
-           <a class="page-link"  href="?page={{ page_obj.number|add:-1 }}" tabindex="-1">Previous</a>
+          <a class="page-link" tabindex="-1">Previous</a>
+        {% endif %}
         </li>
         {% for p in total_page %}
         <li class="page-item {% if p == page_obj.number %} active {% endif %}"><a class="page-link" 
           href="?page={{p}}">{{p}}</a></li>
         {% endfor %}
-  
-        <li class="page-item {% if page_obj.has_next == False %} disabled {% endif %}">
-           <a class="page-link" href="?page={{ page_obj.number|add:1 }}">Next </a>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.number|add:1 }}">Next </a>
+
         </li>
-     
+        {% else %}
+
+        <li class="page-item {% if page_obj.has_next == False %} disabled {% endif %}">
+           <a class="page-link" >Next </a>
+        </li>
+          {% endif %}
      </ul>
     </div>
 
