@@ -96,7 +96,7 @@
           </tr>
         </thead>
         <tbody id="geeks">
-        {% for row in alldata %}
+        {% for row in page_obj %}
           <tr>
             <td class="text-center">{{ row.id }}</td>
             <td class="text-center">{{ row.uname }}</td>
@@ -118,15 +118,17 @@
 
       <ul class="pagination mb-4" style="margin-top: 30px;">
         <li class="page-item {% if page_obj.has_previous == False %} disabled {% endif %}">
-           <a class="page-link" onClick="" tabindex="-1">Previous</a>
+           <a class="page-link"  href="?page={{ page_obj.number|add:-1 }}" tabindex="-1">Previous</a>
         </li>
         {% for p in total_page %}
-        <li class="page-item {% if p == page_obj.number %} active {% endif %}"><a class="page-link" onClick="">{{p}}</a></li>
+        <li class="page-item {% if p == page_obj.number %} active {% endif %}"><a class="page-link" 
+          href="?page={{p}}">{{p}}</a></li>
         {% endfor %}
-     
+  
         <li class="page-item {% if page_obj.has_next == False %} disabled {% endif %}">
-           <a class="page-link" onClick="">Next </a>
+           <a class="page-link" href="?page={{ page_obj.number|add:1 }}">Next </a>
         </li>
+     
      </ul>
     </div>
 
