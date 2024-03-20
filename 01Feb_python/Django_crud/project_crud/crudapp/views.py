@@ -93,9 +93,7 @@ def reg(request):
             
             
             datas = Student.objects.filter(q_objects)          
-            # else:
-                # datas = Student.objects.all()
-            
+                      
             p = Paginator(datas, 4) 
             page_number = request.POST.get('pageno')
             try:
@@ -104,45 +102,26 @@ def reg(request):
                     
                     page_obj = p.page(1)
             except EmptyPage:
-                # if page is empty then return last page
-                            page_obj = p.page(p.num_pages)
+                    page_obj = p.page(p.num_pages)
                 
-            context =  {'alldata':datas,
+            context =  {
+                        'alldata':datas,
                         'page_obj': page_obj,
                         "uname":uname,
                         "email":email,
                         'total_page':range(1, page_obj.paginator.num_pages+1)
                     }
            
-            return render(request, 'regajax.html', context)
-            
-            
+            return render(request, 'regajax.html', context)            
     else:
-         
-        # alldata = Student.objects.all()
-        # p = Paginator(alldata, 4) 
-        # page_number = 1
-        # try:
-        #     page_obj = p.get_page(page_number) 
-        # except PageNotAnInteger:
-       
-        #     page_obj = p.page(1)
-        # except EmptyPage:
-        # # if page is empty then return last page
-        #     page_obj = p.page(p.num_pages)
-        
-        # context =  {'alldata':alldata,
-        #     'page_obj': page_obj,
-        #      'total_page':range(1, page_obj.paginator.num_pages+1)
-        #  }
-        return render(request,'reg.html')
+         return render(request,'reg.html')
 
 def editUser(request,user_id):
        
         select_user = Student.objects.get(id=user_id)
         alldata = Student.objects.all()
         p = Paginator(alldata, 4) 
-        page_number = request.GET.get('page')
+        page_number = request.POST.get('pageno')
         try:
             page_obj = p.get_page(page_number) 
         except PageNotAnInteger:
@@ -152,7 +131,8 @@ def editUser(request,user_id):
       
             page_obj = p.page(p.num_pages)
         
-        context =  {'alldata':alldata,
+        context =  {
+            'alldata':alldata,
             'page_obj': page_obj,
             "select_user":select_user,
             'action':"edit",
