@@ -78,18 +78,26 @@ def reg(request):
         else:
             
             global datas 
-            if 'q' in request.POST :
-                q = request.POST['q']
-        # data = Data.objects.filter(last_name__icontains=q)
-                multiple_q = Q(Q(uname__icontains=q))
+        
+            uname = request.POST['uname']
+            email = request.POST['email']
+
+                
+            q_objects = Q()
+    
+            if uname!="":
+                    q_objects &= Q(uname__icontains=uname)
+            if email!="":
+                    q_objects &= Q(email__icontains=email)
+              
             
             
-                datas = Student.objects.filter(multiple_q)          
-            else:
-                datas = Student.objects.all()
+            datas = Student.objects.filter(q_objects)          
+            # else:
+                # datas = Student.objects.all()
             
-            p = Paginator(datas, 2) 
-            page_number = request.GET.get('page')
+            p = Paginator(datas, 4) 
+            page_number = request.POST.get('pageno')
             try:
                 page_obj = p.get_page(page_number) 
             except PageNotAnInteger:
@@ -101,16 +109,19 @@ def reg(request):
                 
             context =  {'alldata':datas,
                         'page_obj': page_obj,
+                        "uname":uname,
+                        "email":email,
                         'total_page':range(1, page_obj.paginator.num_pages+1)
                     }
+            print("Hello")
             return render(request, 'reg.html', context)
             
             
     else:
-               
+        print("Hello1")       
         alldata = Student.objects.all()
-        p = Paginator(alldata, 2) 
-        page_number = request.GET.get('page')
+        p = Paginator(alldata, 4) 
+        page_number = 1
         try:
             page_obj = p.get_page(page_number) 
         except PageNotAnInteger:
@@ -130,7 +141,7 @@ def editUser(request,user_id):
        
         select_user = Student.objects.get(id=user_id)
         alldata = Student.objects.all()
-        p = Paginator(alldata, 3) 
+        p = Paginator(alldata, 4) 
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number) 

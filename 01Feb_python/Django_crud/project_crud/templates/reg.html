@@ -84,13 +84,14 @@
    <div class="container" >
 
     <div class="row">
-      <form action="" method="post"  >
+      <form action="{% url 'reg' %}" method="post" id="search_frm" >
         {% csrf_token %}
-        <input type="hidden" name="form_type" value="search"  />
+        <input type="hidden" name="pageno" id="pageno" />
+        <input type="hidden" name="form_type" value="search" />
         <div class="col-md-4 m-auto">
          
           <div  class="form-group">
-            <input type="text" class="form-control" placeholder="Search Name" name="q">
+            <input type="text" class="form-control" placeholder="Search Name" name="uname" value="{{uname}}">
         </div>
  
       
@@ -98,11 +99,13 @@
         <div class="col-md-4 m-auto">
           
             <div  class="form-group">
-                <input type="text" class="form-control" placeholder="Search Email" >
+                <input type="text" class="form-control" placeholder="Search Email" name="email" value="{{email}}" >
               </div>
     
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="searchwithfilter(1)">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="resetbtn(1)">Reset</button>
+
       </form>
           </div>
       <h2 align="center">Student Table</h2>
@@ -147,8 +150,7 @@
       <ul class="pagination mb-4" >
         {%if page_obj.has_previous %}
         <li class="page-item">
-           
-          <a class="page-link"  href="?page={{ page_obj.number|add:-1 }}" tabindex="-1">Previous</a>
+            <a class="page-link"  onclick="searchwithfilter({{ page_obj.number|add:-1 }})" tabindex="-1">Previous</a>
        </li>
         {% else %}
         <li class="page-item {% if page_obj.has_previous == False %} disabled {% endif %}">
@@ -157,11 +159,11 @@
         </li>
         {% for p in total_page %}
         <li class="page-item {% if p == page_obj.number %} active {% endif %}"><a class="page-link" 
-          href="?page={{p}}">{{p}}</a></li>
+          onclick="searchwithfilter({{p}})">{{p}}</a></li>
         {% endfor %}
         {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.number|add:1 }}">Next </a>
+          <a class="page-link" onclick="searchwithfilter({{ page_obj.number|add:1 }})">Next </a>
 
         </li>
         {% else %}
@@ -174,7 +176,26 @@
     </div>
 
 </body>
+<script>
+  function searchwithfilter(page){
+   
+    $("#pageno").val(page);
+    $("#search_frm").submit();
 
+  }
+</script>
+<script>
+  function resetbtn(page){
+    $(':input','#search_frm')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .prop('checked', false)
+            .prop('selected', false);
+    $("#pageno").val(page);
+    $("#search_frm").submit();
+
+  }
+</script>
 
 
 </html>
