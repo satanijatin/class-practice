@@ -1,7 +1,5 @@
 from django.db import models
-import os
-from django.contrib.auth.models import User
-
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -14,6 +12,8 @@ class Student(models.Model):
     lang=models.CharField(max_length=50)
     country=models.CharField(max_length=50)
     img=models.ImageField(upload_to='images')
-    
-class User(models.Model):
-    phoneno = models.CharField(max_length=50)
+
+
+class User(AbstractUser):
+    department = models.CharField(max_length=100,default='False')
+    phoneno = models.CharField(max_length=100,default='')

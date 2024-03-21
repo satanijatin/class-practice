@@ -22,7 +22,7 @@
       <form action="{% url 'reg' %}" method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
-
+        <label for="department">Department:{{user.department}}</label>
         <input type="hidden" name="form_type" value="insert"  />
         <input type="hidden" name="user_id" value="{{ select_user.id }}"  />
         <div class="form-group">

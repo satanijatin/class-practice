@@ -3,13 +3,13 @@ from .models import Student
 import os
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 
-
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 def index(request):
@@ -24,7 +24,7 @@ def loginpage(request):
 
 
         user =  authenticate(username=username,password=password)
-        print(user)
+       
         if user is None:
             messages.info(request,"Invalid credentials")
             return redirect('login')
@@ -40,14 +40,17 @@ def SignupPage(request):
         data = request.POST
         first_name = data.get('first_name')
         last_name = data.get('last_name')
+        department = data.get('department')
+        phoneno= data.get('phoneno')
         username = data.get('username')
         password = data.get('password')
 
         if User.objects.filter(username=username).exists():
              messages.info(request,"User alredy exist !!!")
-             return redirect('/')
+             return render(request,'signup.html')
 
-        user = User(first_name=first_name,last_name=last_name,username=username)
+        user = User(first_name=first_name,last_name=last_name,username=username,
+                    department=department,phoneno=phoneno)
         user.set_password(password)
         user.save()
         messages.info(request,"Registration successfully done !!!")
