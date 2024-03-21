@@ -1,16 +1,67 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect
 from .models import Student
 import os
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import authenticate,login,logout
 
 
-# Create your views here.
+
+
+
 def index(request):
     return render(request,'index.html')
 
 
+def loginpage(request):
+    if request.method=='POST':
+        data = request.POST
+        username = data.get('username')
+        password = data.get('password')
 
+
+        user =  authenticate(username=username,password=password)
+        print(user)
+        if user is None:
+            messages.info(request,"Invalid credentials")
+            return redirect('login')
+        else:
+           login(request,user)
+           return redirect('reg')
+
+
+    return render(request,'login.html')
+
+def SignupPage(request):
+    if request.method=='POST':
+        data = request.POST
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        username = data.get('username')
+        password = data.get('password')
+
+        if User.objects.filter(username=username).exists():
+             messages.info(request,"User alredy exist !!!")
+             return redirect('/')
+
+        user = User(first_name=first_name,last_name=last_name,username=username)
+        user.set_password(password)
+        user.save()
+        messages.info(request,"Registration successfully done !!!")
+        return redirect('login')
+
+    return render(request,'signup.html')
+  
+  
+def LogoutPage(request):
+    logout(request)
+    return redirect('/')
+    
+
+@login_required(login_url='/')
 def reg(request): 
     if request.method=='POST':
         if request.POST['form_type']=="insert":

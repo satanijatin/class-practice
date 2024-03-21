@@ -1,5 +1,8 @@
 from django.db import models
 import os
+from django.contrib.auth.models import User
+
+
 
 # Create your models here.
 
@@ -12,3 +15,5 @@ class Student(models.Model):
     country=models.CharField(max_length=50)
     img=models.ImageField(upload_to='images')
     
+class User(models.Model):
+    phoneno = models.CharField(max_length=50)

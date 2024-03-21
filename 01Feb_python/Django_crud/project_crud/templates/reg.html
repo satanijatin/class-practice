@@ -21,6 +21,8 @@
     
       <form action="{% url 'reg' %}" method="post" enctype="multipart/form-data" >
         {% csrf_token %}
+        <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+
         <input type="hidden" name="form_type" value="insert"  />
         <input type="hidden" name="user_id" value="{{ select_user.id }}"  />
         <div class="form-group">
@@ -91,7 +93,7 @@
         <div class="col-md-4 m-auto">
          
           <div  class="form-group">
-            <input type="text" class="form-control" placeholder="Search Name" name="uname" value="{{uname}}">
+            <input type="text" class="form-control" placeholder="Search Name" name="uname" value="{{uname}}" onkeyup="searchwithfilter(1)">
         </div>
  
       
@@ -99,7 +101,7 @@
         <div class="col-md-4 m-auto">
           
             <div  class="form-group">
-                <input type="text" class="form-control" placeholder="Search Email" name="email" value="{{email}}" >
+                <input type="text" class="form-control" placeholder="Search Email" name="email" value="{{email}}" onkeyup="searchwithfilter(1)">
               </div>
     
         </div>
