@@ -13,16 +13,17 @@ User = get_user_model()
 
 
 def index(request):
-    return render(request,'index.html')
+    return redirect('login')
 
 
 def loginpage(request):
+   
     if request.method=='POST':
         data = request.POST
         username = data.get('username')
         password = data.get('password')
 
-
+         
         user =  authenticate(username=username,password=password)
        
         if user is None:
@@ -32,8 +33,12 @@ def loginpage(request):
            login(request,user)
            return redirect('reg')
 
-
-    return render(request,'login.html')
+    user = request.user
+    if user.is_authenticated:
+            return redirect('reg')
+    else:
+        
+        return render(request,'login.html')
 
 def SignupPage(request):
     if request.method=='POST':
@@ -64,7 +69,7 @@ def LogoutPage(request):
     return redirect('/')
     
 
-@login_required(login_url='/')
+
 def reg(request): 
     if request.method=='POST':
         if request.POST['form_type']=="insert":
