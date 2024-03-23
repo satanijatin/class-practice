@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .manager import UserManager
 
 
 # Create your models here.
@@ -15,5 +16,9 @@ class Student(models.Model):
 
 
 class User(AbstractUser):
+   
     department = models.CharField(max_length=100,default='False')
-    phoneno = models.CharField(max_length=100,default='')
+    phoneno = models.CharField(max_length=100,default='',unique=True)
+    
+    USERNAME_FIELD='username'
+    objects=UserManager()

@@ -12,6 +12,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
+
 def index(request):
     return redirect('login')
 
@@ -25,6 +27,7 @@ def loginpage(request):
 
          
         user =  authenticate(username=username,password=password)
+        
        
         if user is None:
             messages.info(request,"Invalid credentials")
@@ -50,8 +53,8 @@ def SignupPage(request):
         username = data.get('username')
         password = data.get('password')
 
-        if User.objects.filter(username=username).exists():
-             messages.info(request,"User alredy exist !!!")
+        if User.objects.filter(phoneno=phoneno).exists():
+             messages.info(request,"phoneno alredy exist !!!")
              return render(request,'signup.html')
 
         user = User(first_name=first_name,last_name=last_name,username=username,
