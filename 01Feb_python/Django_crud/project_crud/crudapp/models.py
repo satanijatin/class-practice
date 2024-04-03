@@ -18,7 +18,7 @@ class Student(models.Model):
 class User(AbstractUser):
    
     department = models.CharField(max_length=100,default='False')
-    phoneno = models.CharField(max_length=100,default='',unique=True)
+    phoneno = models.CharField(max_length=100,default='')
     
-    USERNAME_FIELD='username'
+    # USERNAME_FIELD='username'
     objects=UserManager()
