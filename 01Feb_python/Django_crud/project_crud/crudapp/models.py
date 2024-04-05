@@ -22,3 +22,20 @@ class User(AbstractUser):
     
     # USERNAME_FIELD='username'
     objects=UserManager()
+    
+    
+class Author(models.Model):
+    authorname = models.CharField(max_length=50)
+
+    
+class Publisher(models.Model):
+    
+    publishername = models.CharField(max_length=50)
+
+    
+class Book(models.Model):
+    author=models.ForeignKey(Author,on_delete=models.CASCADE)
+    publisher=models.ForeignKey(Publisher,on_delete=models.CASCADE)
+    Bookname = models.CharField(max_length=200)
+    price = models.IntegerField()
+    
