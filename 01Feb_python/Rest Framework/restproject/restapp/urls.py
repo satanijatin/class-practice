@@ -36,6 +36,9 @@ urlpatterns = [
     path('state/',StateAPI.as_view()),
     path("city/",CityAPI.as_view()),
     path("area/",AreaAPI.as_view()),
+    path("register/",RregisterUser.as_view()),
+
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('getaccesstoken/', GetAccessTokenView.as_view(), name='get-access-token'),
 ]
