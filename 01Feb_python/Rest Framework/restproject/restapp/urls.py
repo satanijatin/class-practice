@@ -18,6 +18,11 @@ Including another URLconf
 from django.urls import path,include
 from .views import *
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
  
     path('students/',StudentAPI.as_view()),
@@ -30,5 +35,7 @@ urlpatterns = [
     path('country/',CountryAPI.as_view()),
     path('state/',StateAPI.as_view()),
     path("city/",CityAPI.as_view()),
-     path("area/",AreaAPI.as_view())
+    path("area/",AreaAPI.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
